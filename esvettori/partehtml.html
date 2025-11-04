@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Array e Statistiche</title>
+    <link rel="stylesheet" href="Stile.css">
+</head>
+<body>
+
+<h2>Array Generato</h2>
+<div id="arrayGrid" class="grid"></div>
+
+<h3>Statistiche</h3>
+<p id="stats"></p>
+
+<h2>Numeri Pari Maggiori di 50</h2>
+<div id="evenGrid" class="grid"></div>
+
+<script>
+    // Genera un array di 100 numeri casuali tra -100 e 100
+    const numeriCasuali = [];
+    for (let i = 0; i < 100; i++) {
+        const valoreCasuale = Math.floor(Math.random() * 201) - 100;
+        numeriCasuali.push(valoreCasuale);
+    }
+
+    // Calcola la media
+    let sommaTotale = 0;
+    for (let i = 0; i < numeriCasuali.length; i++) {
+        sommaTotale += numeriCasuali[i];
+    }
+    const mediaArray = sommaTotale / numeriCasuali.length;
+
+    // Trova massimo e minimo
+    let valoreMax = numeriCasuali[0];
+    let valoreMin = numeriCasuali[0];
+    for (let i = 1; i < numeriCasuali.length; i++) {
+        if (numeriCasuali[i] > valoreMax) valoreMax = numeriCasuali[i];
+        if (numeriCasuali[i] < valoreMin) valoreMin = numeriCasuali[i];
+    }
+
+    // Filtra numeri pari maggiori di 50
+    const pariMaggiori50 = [];
+    for (let i = 0; i < numeriCasuali.length; i++) {
+        if (numeriCasuali[i] > 50 && numeriCasuali[i] % 2 === 0) {
+            pariMaggiori50.push(numeriCasuali[i]);
+        }
+    }
+
+    // Costruisci HTML della griglia principale
+    let htmlArray = "";
+    for (let i = 0; i < numeriCasuali.length; i++) {
+        const classeEvidenza = (numeriCasuali[i] === valoreMax || numeriCasuali[i] === valoreMin) ? "highlight" : "";
+        htmlArray += `<div class="${classeEvidenza}">${numeriCasuali[i]}</div>`;
+    }
+    document.getElementById("arrayGrid").innerHTML = htmlArray;
+
+    // Mostra statistiche
+    document.getElementById("stats").innerHTML = `
+        Media: ${mediaArray.toFixed(2)}<br>
+        Massimo: ${valoreMax}<br>
+        Minimo: ${valoreMin}
+    `;
+
+    // Costruisci HTML della griglia dei numeri pari > 50
+    let htmlPari = "";
+    for (let i = 0; i < pariMaggiori50.length; i++) {
+        htmlPari += `<div>${pariMaggiori50[i]}</div>`;
+    }
+    document.getElementById("evenGrid").innerHTML = htmlPari;
+</script>
+
+</body>
+</html>
