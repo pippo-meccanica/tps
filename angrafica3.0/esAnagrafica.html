@@ -85,14 +85,13 @@
   <script>
     function stampaDati() {
       // Array con tutti i dati
-      const dati = [
-        { label: "Nome", value: document.getElementById("nome").value.trim() },
-        { label: "Cognome", value: document.getElementById("cognome").value.trim() },
-        { label: "Indirizzo", value: document.getElementById("indirizzo").value.trim() },
-        { label: "Città", value: document.getElementById("citta").value.trim() },
-        { label: "CAP", value: document.getElementById("cap").value.trim() },
-        { label: "Anno di nascita", value: document.getElementById("anno").value.trim() }
-      ];
+      const dati = { Nome: document.getElementById("nome"),}
+      { Cognome: document.getElementById("cognome")}
+      { Indirizzo: document.getElementById("indirizzo")}
+      {  Città: document.getElementById("citta")}
+      {  CAP: document.getElementById("cap")}
+      { anno di nascita: document.getElementById("anno") }
+     ;
 
       // Controllo campi obbligatori
       if (!dati[0].value || !dati[1].value || !dati[5].value) {
@@ -140,9 +139,8 @@
       // Stampa dei risultati
       const outputDiv = document.getElementById("output");
       outputDiv.innerHTML =
-        dati.map(d => `<div><strong>${d.label}:</strong> ${d.value}</div>`).join("") +
-        `<div><strong>Età:</strong> ${eta} anni</div>` +
-        `<div><strong>Generazione:</strong> ${gen}</div>`;
+       "<div>"+dati.nome+"</div>"+"<div>"+dati.cognome+"</div>"+"<div>"+dati.indirizzo+"</div>"+"<div>"+dati.citta+"</div>"+"<div>"+dati.CAP+"</div>"+"<div>"+dati.anno di nascita+"</div>"
+        
     }
   </script>
 </body>
