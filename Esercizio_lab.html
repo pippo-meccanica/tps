@@ -2,24 +2,35 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <title>Receiver</title>
+    <title>Sender</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <div class="container">
-        <h2>Pagina Receiver</h2>
-        <p id="risultato"></p>
-    </div>
+<div class="container">
+    <h2>Pagina Sender</h2>
 
-    <script>
-        let p1 = localStorage.getItem("parametro1");
-        let p2 = localStorage.getItem("parametro2");
+    <label>Parametro 1</label>
+    <input type="text" id="param1">
 
-        document.getElementById("risultato").innerHTML =
-            "Parametro 1: <strong>" + p1 + "</strong><br>" +
-            "Parametro 2: <strong>" + p2 + "</strong>";
-    </script>
+    <label>Parametro 2</label>
+    <input type="text" id="param2">
+
+    <button onclick="salvaParametri()">Invia</button>
+</div>
+
+<script>
+    function salvaParametri() {
+        let p1 = document.getElementById("param1").value;
+        let p2 = document.getElementById("param2").value;
+
+        localStorage.setItem("parametro1", p1);
+        localStorage.setItem("parametro2", p2);
+
+        // opzionale: vai alla pagina receiver
+        window.location.href = "receiver.html";
+    }
+</script>
 
 </body>
 </html>
@@ -27,37 +38,27 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <title>Sender</title>
+    <title>Receiver</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <div class="container">
-        <h2>Pagina Sender</h2>
+<div class="container">
+    <h2>Pagina Receiver</h2>
+    <p id="risultato"></p>
+</div>
 
-        <label>Parametro 1</label>
-        <input type="text" id="param1">
+<script>
+    let p1 = localStorage.getItem("parametro1");
+    let p2 = localStorage.getItem("parametro2");
 
-        <label>Parametro 2</label>
-        <input type="text" id="param2">
-
-        <button onclick="salvaParametri()">Invia</button>
-    </div>
-
-    <script>
-        function salvaParametri() {
-            let p1 = document.getElementById("param1").value;
-            let p2 = document.getElementById("param2").value;
-
-            localStorage.setItem("parametro1", p1);
-            localStorage.setItem("parametro2", p2);
-        }
-    </script>
-
+    document.getElementById("risultato").innerHTML =
+        "Parametro 1: <strong>" + (p1 ?? "") + "</strong><br>" +
+        "Parametro 2: <strong>" + (p2 ?? "") + "</strong>";
+</script>
+<style>
 </body>
 </html>
-<style>
-    
 body {
     font-family: Arial, sans-serif;
     background-color: #f2f2f2;
@@ -101,4 +102,4 @@ button {
 button:hover {
     background-color: #0056b3;
 }
-</style>
+<style>
