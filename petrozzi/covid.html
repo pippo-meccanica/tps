@@ -1,69 +1,41 @@
-<!DOCTYPE html>
-<html lang="it">
-<head>
-    <meta charset="UTF-8">
-    <title>Dati COVID-19 Italia</title>
-    <style>
-        body { font-family: Arial, sans-serif; background-color: #f2f5fa; text-align: center; padding: 20px; }
-        h1 { color: #174a86; }
-        table { border-collapse: collapse; width: 100%; background-color: white; }
-        th, td { border: 1px solid #cccccc; padding: 10px; text-align: center; }
-        th { background-color: #174a86; color: white; }
-        tr:nth-child(even) { background-color: #eaf1fa; }
-    </style>
-</head>
-<body>
+const url = "https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-json/dpc-covid19-ita-andamento-nazionale.json";
+const xhr = new XMLHttpRequest();
 
-    <h1>Andamento COVID-19 in Italia</h1>
-    <p>Dati della Protezione Civile</p>
-    <p id="messaggio">Caricamento dati...</p>
+xhr.open("GET", url, true);
+xhr.onload = function() {
+    if (xhr.status >= 200 && xhr.status < 300) {
+        const dati = JSON.parse(xhr.responseText);
+        const colonne = ["data", "stato", "nuovi_positivi", "totale_positivi", "terapia_intensiva", "dimessi_guariti", "deceduti", "totale_casi", "tamponi"];
+        
+        // Corretto: prendiamo le chiavi dal primo elemento dell'array
+        const chiavi = Object.keys(dati[0]);
 
-    <table id="tabella">
-        <thead id="intestazione"></thead>
-        <tbody id="contenuto"></tbody>
-    </table>
+        let intestazione = "<tr>";
+        chiavi.forEach(chiave => {
+            if (colonne.includes(chiave)) intestazione += "<th>" + chiave + "</th>";
+        });
+        intestazione += "</tr>";
+        document.getElementById("intestazione").innerHTML = intestazione;
 
-    <script>
-        const url = "https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-json/dpc-covid19-ita-andamento-nazionale.json";
-        const xhr = new XMLHttpRequest();
-
-        xhr.open("GET", url, true);
-        xhr.onload = function() {
-            if (xhr.status >= 200 && xhr.status < 300) {
-                const dati = JSON.parse(xhr.responseText);
-                const colonne = ["data", "stato", "nuovi_positivi", "totale_positivi", "terapia_intensiva", "dimessi_guariti", "deceduti", "totale_casi", "tamponi"];
-                const chiavi = Object.keys(dati[0]); // Corretto: dati[0]
-
-                let intestazione = "<tr>";
-                chiavi.forEach(chiave => {
-                    if (colonne.includes(chiave)) intestazione += "<th>" + chiave + "</th>";
-                });
-                intestazione += "</tr>";
-                document.getElementById("intestazione").innerHTML = intestazione;
-
-                let contenuto = "";
-                dati.slice(-30).reverse().forEach(giorno => {
-                    contenuto += "<tr>";
-                    chiavi.forEach(chiave => {
-                        if (colonne.includes(chiave)) {
-                            let valore = giorno[chiave] ?? "-";
-                            if (chiave === "data" && valore !== "-") valore = valore.substring(0, 10);
-                            contenuto += "<td>" + valore + "</td>";
-                        }
-                    });
-                    contenuto += "</tr>";
-                });
-                document.getElementById("contenuto").innerHTML = contenuto;
-                document.getElementById("messaggio").textContent = "Ultime 30 rilevazioni disponibili";
-            } else {
-                document.getElementById("messaggio").textContent = "Errore nel caricamento dei dati";
-            }
-        };
-        xhr.onerror = function() {
-            document.getElementById("messaggio").textContent = "Errore nel caricamento dei dati";
-        };
-        xhr.send();
-    </script>
-
-</body>
-</html>
+        let contenuto = "";
+        dati.slice(-30).reverse().forEach(giorno => {
+            contenuto += "<tr>";
+            chiavi.forEach(chiave => {
+                if (colonne.includes(chiave)) {
+                    let valore = giorno[chiave] ?? "-";
+                    if (chiave === "data" && valore !== "-") valore = valore.substring(0, 10);
+                    contenuto += "<td>" + valore + "</td>";
+                }
+            });
+            contenuto += "</tr>";
+        });
+        document.getElementById("contenuto").innerHTML = contenuto;
+        document.getElementById("messaggio").textContent = "Ultime 30 rilevazioni disponibili";
+    } else {
+        document.getElementById("messaggio").textContent = "Errore nel caricamento dei dati";
+    }
+};
+xhr.onerror = function() {
+    document.getElementById("messaggio").textContent = "Errore nel caricamento dei dati";
+};
+xhr.send();
